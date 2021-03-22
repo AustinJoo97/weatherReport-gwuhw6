@@ -1,7 +1,7 @@
 let citySearch = document.getElementById('searchAndHistory');
 let searchedCityQuery = document.getElementById('searchedCityQuery');
 let searchButton = document.getElementById('searchButton');
-let lastFiveSearched = document.getElementById('lastFiveSearched');
+let lastSearched = document.getElementById('lastSearched');
 let weatherAPI = 'http://api.openweathermap.org/data/2.5/forecast?q=';
 let APIKey = '&appid=d7d8f56ce1652da17774366ee1b61ddd'
 let tempAPI;
@@ -48,21 +48,28 @@ function weatherAPICall(apiURL){
     })
 }
 
-function renderLastFiveCities(){
+function renderLastCities(){
     let recentSearchesArray;
     if(!localStorage.getItem('cityWeatherSearches')){
         localStorage.setItem('cityWeatherSearches', JSON.stringify([]));
     } else {
         recentSearchesArray = JSON.parse(localStorage.getItem('cityWeatherSearches'));
         for(let i = 0; i < recentSearchesArray.length; i++){
-            if(i === 15){
+            if(i === 14){
                 break;
             }
             let previouslySearched = document.createElement('button');
             previouslySearched.textContent = recentSearchesArray[i];
             previouslySearched.setAttribute("class", "previouslySearched");
-            lastFiveSearched.appendChild(previouslySearched);
+            lastSearched.appendChild(previouslySearched);
         }
+        let clearRecentlySearched = document.createElement('button');
+        clearRecentlySearched.textContent = 'Clear Recent Searches';
+        clearRecentlySearched.setAttribute("class", "previouslySearched");
+        clearRecentlySearched.style.backgroundColor = 'Red';
+        lastSearched.appendChild(clearRecentlySearched);
+
+
     }
 }
 
@@ -72,5 +79,5 @@ function saveToHistory(){
 
 }
 
-renderLastFiveCities()
+renderLastCities()
 citySearch.addEventListener("submit", retrieveWeather)
