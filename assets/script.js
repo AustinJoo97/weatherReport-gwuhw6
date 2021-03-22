@@ -50,7 +50,7 @@ function renderLastFiveCities(){
     } else {
         recentSearchesArray = JSON.parse(localStorage.getItem('cityWeatherSearches'));
         for(let i = 0; i < recentSearchesArray.length; i++){
-            if(i === 8){
+            if(i === 15){
                 break;
             }
             let previouslySearched = document.createElement('button');

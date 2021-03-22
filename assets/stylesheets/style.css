@@ -2,6 +2,14 @@ body{
     padding: 0 15px;
 }
 
+.previouslySearched{
+    height: 36px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+    border-radius: 10px;
+}
+
 #searchAndHistory{
     height: 720px;
     border: 1px solid purple;
@@ -23,11 +31,4 @@ body{
 
 #lastFiveSearched{
     margin-top: 20px;
-}
-
-.previouslySearched{
-    height: 25px;
-    width: 100%;
-    text-align: center;
-    margin-top: 1px;
 }
