@@ -40,11 +40,11 @@ function retrieveWeather(event){
     }
     tempAPI = weatherAPI + searchQuery + APIKey + APIQueries;
     saveToHistory(searchedCityQuery.value)
-    weatherAPICall(tempAPI);
+    weatherAPICall(tempAPI, searchedCityQuery.value);
     tempAPI = '';
 }
 
-function weatherAPICall(apiURL){
+function weatherAPICall(apiURL, searchedCityName){
     let weatherArray = [];
     let todaysWeather;
     let counter = 0;
@@ -77,7 +77,7 @@ function weatherAPICall(apiURL){
             })
         }
 
-        todaysDate.textContent = `${todaysWeather.date}`;
+        todaysDate.textContent = `${searchedCityName} (${moment(todaysWeather.date).format('MMM Do, YYYY')})`;
         todaysTemp.textContent = `Temperature: ${todaysWeather.temperature}`;
         todaysHumidity.textContent = `Humidity: ${todaysWeather.humidity}`;
         todaysWind.textContent = `Wind Speed: ${todaysWeather.windSpeed}`;
