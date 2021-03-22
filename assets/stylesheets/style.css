@@ -1,5 +1,5 @@
 body{
-    padding-right: 15px;
+    padding: 0 15px;
 }
 
 #searchAndHistory{
@@ -19,4 +19,15 @@ body{
 #fiveDayForecast{
     height: 40%;
     border: 1px solid cyan;
+}
+
+#lastFiveSearched{
+    margin-top: 20px;
+}
+
+.previouslySearched{
+    height: 25px;
+    width: 100%;
+    text-align: center;
+    margin-top: 1px;
 }

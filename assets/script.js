@@ -43,4 +43,23 @@ function weatherAPICall(apiURL){
 
 }
 
+function renderLastFiveCities(){
+    let recentSearchesArray;
+    if(!localStorage.getItem('cityWeatherSearches')){
+        localStorage.setItem('cityWeatherSearches', JSON.stringify([]));
+    } else {
+        recentSearchesArray = JSON.parse(localStorage.getItem('cityWeatherSearches'));
+        for(let i = 0; i < recentSearchesArray.length; i++){
+            if(i === 8){
+                break;
+            }
+            let previouslySearched = document.createElement('button');
+            previouslySearched.textContent = recentSearchesArray[i];
+            previouslySearched.setAttribute("class", "previouslySearched");
+            lastFiveSearched.appendChild(previouslySearched);
+        }
+    }
+}
+
+renderLastFiveCities()
 citySearch.addEventListener("submit", retrieveWeather)
