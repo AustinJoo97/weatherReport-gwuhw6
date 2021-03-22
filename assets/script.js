@@ -32,6 +32,7 @@ function retrieveWeather(event){
 }
 
 function weatherAPICall(apiURL){
+    let weatherArray;
     fetch(apiURL)
     .then(function(response){
         console.log(response);
@@ -39,8 +40,12 @@ function weatherAPICall(apiURL){
     })
     .then(function(data){
         console.log(data);
+        weatherArray = [];
+        for(let i = 0; i < 6; i++){
+            weatherArray.push(data.list[i]);
+        }
+        console.log(weatherArray);
     })
-
 }
 
 function renderLastFiveCities(){
@@ -59,6 +64,12 @@ function renderLastFiveCities(){
             lastFiveSearched.appendChild(previouslySearched);
         }
     }
+}
+
+// This function will be used in the retrieveWeather function, taking the searchedCityQuery.value and adding it to the localStorage.cityWeatherSearches array
+    // A check will be done first using Array.indexOf to see if the city already exists in recent searches to determine if the city was already searched recently
+function saveToHistory(){
+
 }
 
 renderLastFiveCities()
