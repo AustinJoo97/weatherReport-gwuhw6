@@ -2,8 +2,15 @@ let citySearch = document.getElementById('searchAndHistory');
 let searchedCityQuery = document.getElementById('searchedCityQuery');
 let searchButton = document.getElementById('searchButton');
 let lastSearched = document.getElementById('lastSearched');
+let currentWeather = document.getElementById('currentWeather');
+let todaysDate = document.getElementById('todaysDate');
+let todaysTemp = document.getElementById('todaysTemp');
+let todaysHumidity = document.getElementById('todaysHumidity');
+let todaysWind = document.getElementById('todaysWind');
 let weatherAPI = 'http://api.openweathermap.org/data/2.5/forecast?q=';
+let weatherAPI2 = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=';
 let APIKey = '&appid=d7d8f56ce1652da17774366ee1b61ddd'
+let APIQueries = '&units=imperial'
 let tempAPI;
 let clearRecentlySearched;
 
@@ -31,27 +38,54 @@ function retrieveWeather(event){
             }
         }
     }
-    tempAPI = weatherAPI + searchQuery + APIKey;
+    tempAPI = weatherAPI + searchQuery + APIKey + APIQueries;
     saveToHistory(searchedCityQuery.value)
     weatherAPICall(tempAPI);
     tempAPI = '';
 }
 
 function weatherAPICall(apiURL){
-    let weatherArray;
+    let weatherArray = [];
+    let todaysWeather;
+    let counter = 0;
+    let fiveCast = [];
+
     fetch(apiURL)
     .then(function(response){
         console.log(response);
         return response.json()
     })
     .then(function(data){
-        console.log(data);
-        weatherArray = [];
-        for(let i = 0; i < 6; i++){
-            weatherArray.push(data.list[i]);
+        while(weatherArray.length < 6){
+            weatherArray.push(data.list[counter]);
+            counter += 7;
         }
-        console.log(weatherArray);
+
+        todaysWeather = {
+            date: weatherArray[0].dt_txt,
+            temperature: weatherArray[0].main.temp,
+            humidity: weatherArray[0].main.humidity,
+            windSpeed: weatherArray[0].wind.speed,
+            // uvIndex: 
+        }
+
+        for(let i = 1; i <weatherArray.length; i++){
+            fiveCast.push({
+                date: weatherArray[i].dt_txt,
+                temperature: weatherArray[i].main.temp,
+                humidity: weatherArray[i].main.humidity
+            })
+        }
+
+        todaysDate.textContent = `${todaysWeather.date}`;
+        todaysTemp.textContent = `Temperature: ${todaysWeather.temperature}`;
+        todaysHumidity.textContent = `Humidity: ${todaysWeather.humidity}`;
+        todaysWind.textContent = `Wind Speed: ${todaysWeather.windSpeed}`;
+
+        console.log(todaysWeather);
+        console.log(fiveCast)
     })
+
 }
 
 function renderLastCities(){

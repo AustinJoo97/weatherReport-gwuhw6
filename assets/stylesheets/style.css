@@ -10,6 +10,10 @@ body{
     border-radius: 10px;
 }
 
+.todaysConditions{
+    line-height: 3;
+}
+
 #searchAndHistory{
     height: 720px;
     border: 1px solid purple;
@@ -22,6 +26,8 @@ body{
 #currentWeather{
     height: 60%;
     border: 1px solid red;
+    text-align: center;
+    display: block;
 }
 
 #fiveDayForecast{
