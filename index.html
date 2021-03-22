@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta charset='UTF-8'>
-        <link href='./assets/stylesheets/reset.css'>
+        <link rel='stylesheet' href='./assets/stylesheets/reset.css'>
         <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'/>
-        <link href='./assets/stylesheets/style.css'>
+        <link rel='stylesheet' href='./assets/stylesheets/style.css'>
     </head>
     <body>
 
         <div class='row'>
-            <div class='col-4' id='searchAndHistory'>
+            <div class='col-3' id='searchAndHistory'>
                 <h3>Search for a City:</h3>
                 <form id='citySearch'>
                     <input>
@@ -17,7 +17,8 @@
                 </form>
                 <ul id='lastFiveSearched'></ul>
             </div>
-            <div class='col-8'>
+
+            <div class='col-9' id="weatherReport">
                 <div class='row' id='currentWeather'></div>
                 <div class='row' id='fiveDayForecast'></div>
             </div>

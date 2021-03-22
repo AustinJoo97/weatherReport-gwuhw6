@@ -1,4 +1,18 @@
 #searchAndHistory{
-    height: 100px;
+    height: 720px;
     border: 1px solid purple;
+}
+
+#weatherReport{
+    border: 1px solid purple;
+}
+
+#currentWeather{
+    height: 60%;
+    border: 1px solid red;
+}
+
+#fiveDayForecast{
+    height: 40%;
+    border: 1px solid cyan;
 }
