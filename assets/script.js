@@ -80,8 +80,6 @@ function renderLastCities(){
     }
 }
 
-// This function will be used in the retrieveWeather function, taking the searchedCityQuery.value and adding it to the localStorage.cityWeatherSearches array
-    // A check will be done first using Array.indexOf to see if the city already exists in recent searches to determine if the city was already searched recently
 function saveToHistory(cityName){
     let savedCitiesArray = JSON.parse(localStorage.getItem('cityWeatherSearches'));
     if(savedCitiesArray.includes(cityName)){
