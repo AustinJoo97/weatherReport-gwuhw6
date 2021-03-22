@@ -5,6 +5,11 @@ let lastSearched = document.getElementById('lastSearched');
 let weatherAPI = 'http://api.openweathermap.org/data/2.5/forecast?q=';
 let APIKey = '&appid=d7d8f56ce1652da17774366ee1b61ddd'
 let tempAPI;
+let clearRecentlySearched;
+
+function initializer(){
+    renderLastCities();
+}
 
 function retrieveWeather(event){
     event.preventDefault(); 
@@ -27,6 +32,7 @@ function retrieveWeather(event){
         }
     }
     tempAPI = weatherAPI + searchQuery + APIKey;
+    saveToHistory(searchedCityQuery.value)
     weatherAPICall(tempAPI);
     tempAPI = '';
 }
@@ -63,21 +69,37 @@ function renderLastCities(){
             previouslySearched.setAttribute("class", "previouslySearched");
             lastSearched.appendChild(previouslySearched);
         }
-        let clearRecentlySearched = document.createElement('button');
+    }
+    if(!lastSearched.querySelector('#clearHistoryButton')){
+        clearRecentlySearched = document.createElement('button');
         clearRecentlySearched.textContent = 'Clear Recent Searches';
         clearRecentlySearched.setAttribute("class", "previouslySearched");
+        clearRecentlySearched.setAttribute("id", "clearHistoryButton")
         clearRecentlySearched.style.backgroundColor = 'Red';
         lastSearched.appendChild(clearRecentlySearched);
-
-
     }
 }
 
 // This function will be used in the retrieveWeather function, taking the searchedCityQuery.value and adding it to the localStorage.cityWeatherSearches array
     // A check will be done first using Array.indexOf to see if the city already exists in recent searches to determine if the city was already searched recently
-function saveToHistory(){
-
+function saveToHistory(cityName){
+    let savedCitiesArray = JSON.parse(localStorage.getItem('cityWeatherSearches'));
+    if(savedCitiesArray.includes(cityName)){
+        savedCitiesArray.splice(savedCitiesArray.indexOf(cityName), 1);
+    }
+    savedCitiesArray.unshift(cityName);
+    localStorage.setItem('cityWeatherSearches', JSON.stringify(savedCitiesArray));
+    while(lastSearched.firstChild){
+        lastSearched.removeChild(lastSearched.firstChild);
+    }
+    renderLastCities();
 }
 
-renderLastCities()
-citySearch.addEventListener("submit", retrieveWeather)
+function clearSearchHistory(){
+    localStorage.setItem('cityWeatherSearches', JSON.stringify([]));
+    document.location.reload();
+}
+
+initializer();
+citySearch.addEventListener("submit", retrieveWeather);
+clearRecentlySearched.addEventListener("click", clearSearchHistory);
