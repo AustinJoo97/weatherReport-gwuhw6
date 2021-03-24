@@ -10,7 +10,7 @@ let todaysWind = document.getElementById('todaysWind');
 let todaysWeatherIcon = document.getElementById('todaysWeatherIcon');
 let futureDays = document.getElementById('fiveDayForecast');
 let weatherAPI = 'http://api.openweathermap.org/data/2.5/forecast?q=';
-let weatherAPI2 = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=';
+let resetAPI = weatherAPI;
 let APIKey = '&appid=d7d8f56ce1652da17774366ee1b61ddd'
 let APIQueries = '&units=imperial'
 let tempAPI;
@@ -22,10 +22,15 @@ function initializer(){
 
 function retrieveWeather(event){
     event.preventDefault(); 
+    let searchArray = [];
     let searchQuery = '';
     // Try using event.target.value.split(" ") or something of the like to get searchArray when running this fxn with onclick for recently searched buttons
-
-    let searchArray = searchedCityQuery.value.split(" ");
+    // if(event.target.textContent !== 'search'){
+    // } else {
+        
+        // }
+    searchArray = searchedCityQuery.value.split(" ");
+    // searchArray = event.target.textContent.split(" ");
 
     if(searchArray.length === 1){
         if(searchArray[0] === ""){
@@ -46,6 +51,7 @@ function retrieveWeather(event){
     saveToHistory(searchedCityQuery.value)
     weatherAPICall(tempAPI, searchedCityQuery.value);
     tempAPI = '';
+    weatherAPI = resetAPI;
 }
 
 function weatherAPICall(apiURL, searchedCityName){
@@ -57,24 +63,25 @@ function weatherAPICall(apiURL, searchedCityName){
 
     fetch(apiURL)
     .then(function(response){
-        console.log(response);
         return response.json()
     })
     .then(function(data){
+        // console.log('this is data: ' + JSON.stringify(data.list));
         while(weatherArray.length < 6){
-            console.log(data.list[counter])
-            if(data.list[counter].weather[0].icon === '01n' || data.list[counter].weather[0].icon === '04n' || data.list[counter].weather[0].icon === '10n' ){
-                if(!data.list[counter-3] || data.list[counter-3].dt_txt.substr(0, 9) !== data.list[counter].dt_txt.substr(0,9)){
-                    weatherArray.push(data.list[counter+3]);
-                } else {
-                    weatherArray.push(data.list[counter-3]);
-                }
-            } else {
-                weatherArray.push(data.list[counter-3]);
-            }
+            // console.log(`This is data.list at counter ${counter}: ${data.list[counter]}`)
+            // if(data.list[counter].weather[0].icon === '01n' || data.list[counter].weather[0].icon === '04n' || data.list[counter].weather[0].icon === '10n' ){
+            //     if(data.list[counter-3] && data.list[counter-3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
+            //         weatherArray.push(data.list[counter-3]);
+            //     }  else if(!data.list[counter-3] && data.list[counter+3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
+            //         weatherArray.push(data.list[counter-3]);
+            //     }
+            // }
+            
+            weatherArray.push(data.list[counter]);
             counter += 7;
         }
 
+        // console.log(`this is weatherArray: ${JSON.stringify(weatherArray)}`)
         todaysWeather = {
             date: weatherArray[0].dt_txt,
             icon: `http://openweathermap.org/img/wn/${weatherArray[0].weather[0].icon}.png`,
@@ -123,6 +130,7 @@ function renderLastCities(){
             let previouslySearched = document.createElement('button');
             previouslySearched.textContent = recentSearchesArray[i];
             previouslySearched.setAttribute("class", "previouslySearched");
+            previouslySearched.addEventListener("click", retrieveWeather)
             lastSearched.appendChild(previouslySearched);
         }
     }
