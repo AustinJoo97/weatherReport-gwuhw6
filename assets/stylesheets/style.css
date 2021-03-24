@@ -15,6 +15,10 @@ body{
     line-height: 3;
 }
 
+.futureDays{
+    text-align: center;
+}
+
 #searchAndHistory{
     height: 720px;
     border: 1px solid purple;
@@ -34,6 +38,7 @@ body{
 #fiveDayForecast{
     height: 40%;
     border: 1px solid cyan;
+    padding-top: 50px;
 }
 
 #lastSearched{

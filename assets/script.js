@@ -7,7 +7,8 @@ let todaysDate = document.getElementById('todaysDate');
 let todaysTemp = document.getElementById('todaysTemp');
 let todaysHumidity = document.getElementById('todaysHumidity');
 let todaysWind = document.getElementById('todaysWind');
-let todaysWeatherIcon = document.getElementById('todaysWeatherIcon')
+let todaysWeatherIcon = document.getElementById('todaysWeatherIcon');
+let futureDays = document.getElementById('fiveDayForecast');
 let weatherAPI = 'http://api.openweathermap.org/data/2.5/forecast?q=';
 let weatherAPI2 = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=';
 let APIKey = '&appid=d7d8f56ce1652da17774366ee1b61ddd'
@@ -60,7 +61,6 @@ function weatherAPICall(apiURL, searchedCityName){
         return response.json()
     })
     .then(function(data){
-        console.log(data.list);
         while(weatherArray.length < 6){
             weatherArray.push(data.list[counter]);
             counter += 7;
@@ -75,7 +75,6 @@ function weatherAPICall(apiURL, searchedCityName){
             // uvIndex: 
         }
 
-        console.log(todaysWeather.icon)
         todaysDate.textContent = `${searchedCityName} (${moment(todaysWeather.date).format('MMM Do, YYYY')})`;
         todaysWeatherIcon.src = `${todaysWeather.icon}`;
         todaysTemp.textContent = `Temperature: ${todaysWeather.temperature}F`;
@@ -85,14 +84,19 @@ function weatherAPICall(apiURL, searchedCityName){
         for(let i = 1; i < weatherArray.length; i++){
             fiveCast.push({
                 date: weatherArray[i].dt_txt,
+                icon: `http://openweathermap.org/img/wn/${weatherArray[i].weather[0].icon}.png`,
                 temperature: weatherArray[i].main.temp,
                 humidity: weatherArray[i].main.humidity
             })
         }
 
-
-        console.log(todaysWeather);
-        console.log(fiveCast)
+        for(let i = 0; i < fiveCast.length; i++){
+            let renderingDay = document.getElementById(`day${i+1}`);
+            renderingDay.querySelector(`#day${i+1}Date`).textContent = `${moment(fiveCast[i].date).format('MMM Do, YYYY')}`;
+            renderingDay.querySelector(`#day${i+1}WeatherIcon`).src = fiveCast[i].icon;
+            renderingDay.querySelector(`#day${i+1}Temp`).textContent = `Temp: ${fiveCast[i].temperature}F`;
+            renderingDay.querySelector(`#day${i+1}Humidity`).textContent = `Hum: ${fiveCast[i].humidity}%`
+        }
     })
 
 }
@@ -148,6 +152,5 @@ clearRecentlySearched.addEventListener("click", clearSearchHistory);
 
 
 // NEED TO DO
-    // Get 5 days of weather cards rendering
     // Add click functionality for recently searched buttons
     // Get uv index rendering to screen
