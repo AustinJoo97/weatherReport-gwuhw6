@@ -17,6 +17,18 @@ body{
 
 .futureDays{
     text-align: center;
+    padding-top: 50px;
+}
+
+#day1,
+#day3,
+#day5{
+    background-color: pink;
+}
+
+#day2,
+#day4{
+    background-color: greenyellow;
 }
 
 #searchAndHistory{
@@ -38,7 +50,6 @@ body{
 #fiveDayForecast{
     height: 40%;
     border: 1px solid cyan;
-    padding-top: 50px;
 }
 
 #lastSearched{

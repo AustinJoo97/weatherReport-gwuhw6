@@ -62,7 +62,16 @@ function weatherAPICall(apiURL, searchedCityName){
     })
     .then(function(data){
         while(weatherArray.length < 6){
-            weatherArray.push(data.list[counter]);
+            console.log(data.list[counter])
+            if(data.list[counter].weather[0].icon === '01n' || data.list[counter].weather[0].icon === '04n' || data.list[counter].weather[0].icon === '10n' ){
+                if(!data.list[counter-3] || data.list[counter-3].dt_txt.substr(0, 9) !== data.list[counter].dt_txt.substr(0,9)){
+                    weatherArray.push(data.list[counter+3]);
+                } else {
+                    weatherArray.push(data.list[counter-3]);
+                }
+            } else {
+                weatherArray.push(data.list[counter-3]);
+            }
             counter += 7;
         }
 
