@@ -28,12 +28,17 @@ body{
 
 #day2,
 #day4{
-    background-color: greenyellow;
+    background-color: yellow;
 }
 
 #searchAndHistory{
     height: 720px;
     border: 1px solid purple;
+    background-color: greenyellow;
+}
+
+#clearHistoryButton{
+    color: white;
 }
 
 #weatherReport{

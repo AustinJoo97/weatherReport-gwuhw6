@@ -130,7 +130,7 @@ function renderLastCities(){
         clearRecentlySearched = document.createElement('button');
         clearRecentlySearched.textContent = 'Clear Recent Searches';
         clearRecentlySearched.setAttribute("class", "previouslySearched");
-        clearRecentlySearched.setAttribute("id", "clearHistoryButton")
+        clearRecentlySearched.setAttribute("id", "clearHistoryButton");
         clearRecentlySearched.style.backgroundColor = 'Red';
         lastSearched.appendChild(clearRecentlySearched);
     }
