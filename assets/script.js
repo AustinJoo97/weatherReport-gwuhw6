@@ -7,6 +7,7 @@ let todaysDate = document.getElementById('todaysDate');
 let todaysTemp = document.getElementById('todaysTemp');
 let todaysHumidity = document.getElementById('todaysHumidity');
 let todaysWind = document.getElementById('todaysWind');
+let todaysWeatherIcon = document.getElementById('todaysWeatherIcon')
 let weatherAPI = 'http://api.openweathermap.org/data/2.5/forecast?q=';
 let weatherAPI2 = 'http://api.openweathermap.org/data/2.5/forecast/daily?q=';
 let APIKey = '&appid=d7d8f56ce1652da17774366ee1b61ddd'
@@ -21,6 +22,8 @@ function initializer(){
 function retrieveWeather(event){
     event.preventDefault(); 
     let searchQuery = '';
+    // Try using event.target.value.split(" ") or something of the like to get searchArray when running this fxn with onclick for recently searched buttons
+
     let searchArray = searchedCityQuery.value.split(" ");
 
     if(searchArray.length === 1){
@@ -49,6 +52,7 @@ function weatherAPICall(apiURL, searchedCityName){
     let todaysWeather;
     let counter = 0;
     let fiveCast = [];
+    searchedCityName = searchedCityName.charAt(0).toUpperCase() +  searchedCityName.slice(1);
 
     fetch(apiURL)
     .then(function(response){
@@ -56,6 +60,7 @@ function weatherAPICall(apiURL, searchedCityName){
         return response.json()
     })
     .then(function(data){
+        console.log(data.list);
         while(weatherArray.length < 6){
             weatherArray.push(data.list[counter]);
             counter += 7;
@@ -63,13 +68,21 @@ function weatherAPICall(apiURL, searchedCityName){
 
         todaysWeather = {
             date: weatherArray[0].dt_txt,
+            icon: `http://openweathermap.org/img/wn/${weatherArray[0].weather[0].icon}.png`,
             temperature: weatherArray[0].main.temp,
             humidity: weatherArray[0].main.humidity,
             windSpeed: weatherArray[0].wind.speed,
             // uvIndex: 
         }
 
-        for(let i = 1; i <weatherArray.length; i++){
+        console.log(todaysWeather.icon)
+        todaysDate.textContent = `${searchedCityName} (${moment(todaysWeather.date).format('MMM Do, YYYY')})`;
+        todaysWeatherIcon.src = `${todaysWeather.icon}`;
+        todaysTemp.textContent = `Temperature: ${todaysWeather.temperature}F`;
+        todaysHumidity.textContent = `Humidity: ${todaysWeather.humidity}%`;
+        todaysWind.textContent = `Wind Speed: ${todaysWeather.windSpeed} MPH`;
+
+        for(let i = 1; i < weatherArray.length; i++){
             fiveCast.push({
                 date: weatherArray[i].dt_txt,
                 temperature: weatherArray[i].main.temp,
@@ -77,10 +90,6 @@ function weatherAPICall(apiURL, searchedCityName){
             })
         }
 
-        todaysDate.textContent = `${searchedCityName} (${moment(todaysWeather.date).format('MMM Do, YYYY')})`;
-        todaysTemp.textContent = `Temperature: ${todaysWeather.temperature}`;
-        todaysHumidity.textContent = `Humidity: ${todaysWeather.humidity}`;
-        todaysWind.textContent = `Wind Speed: ${todaysWeather.windSpeed}`;
 
         console.log(todaysWeather);
         console.log(fiveCast)
@@ -116,6 +125,7 @@ function renderLastCities(){
 
 function saveToHistory(cityName){
     let savedCitiesArray = JSON.parse(localStorage.getItem('cityWeatherSearches'));
+    cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
     if(savedCitiesArray.includes(cityName)){
         savedCitiesArray.splice(savedCitiesArray.indexOf(cityName), 1);
     }
@@ -135,3 +145,9 @@ function clearSearchHistory(){
 initializer();
 citySearch.addEventListener("submit", retrieveWeather);
 clearRecentlySearched.addEventListener("click", clearSearchHistory);
+
+
+// NEED TO DO
+    // Get 5 days of weather cards rendering
+    // Add click functionality for recently searched buttons
+    // Get uv index rendering to screen
