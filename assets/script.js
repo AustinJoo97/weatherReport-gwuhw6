@@ -24,13 +24,15 @@ function retrieveWeather(event){
     event.preventDefault(); 
     let searchArray = [];
     let searchQuery = '';
+    let cityName;
     // Try using event.target.value.split(" ") or something of the like to get searchArray when running this fxn with onclick for recently searched buttons
-    // if(event.target.textContent !== 'search'){
-    // } else {
-        
-        // }
-    searchArray = searchedCityQuery.value.split(" ");
-    // searchArray = event.target.textContent.split(" ");
+    if(typeof event.target.value === 'string'){
+        cityName = event.target.textContent;
+        searchArray = event.target.textContent.split(" ");
+    } else {
+        cityName = searchedCityQuery.value;
+        searchArray = searchedCityQuery.value.split(" ");
+    }
 
     if(searchArray.length === 1){
         if(searchArray[0] === ""){
@@ -48,10 +50,11 @@ function retrieveWeather(event){
         }
     }
     tempAPI = weatherAPI + searchQuery + APIKey + APIQueries;
-    saveToHistory(searchedCityQuery.value)
-    weatherAPICall(tempAPI, searchedCityQuery.value);
+    saveToHistory(cityName)
+    weatherAPICall(tempAPI, cityName);
     tempAPI = '';
     weatherAPI = resetAPI;
+    searchedCityQuery.value = '';
 }
 
 function weatherAPICall(apiURL, searchedCityName){
@@ -66,7 +69,6 @@ function weatherAPICall(apiURL, searchedCityName){
         return response.json()
     })
     .then(function(data){
-        // console.log('this is data: ' + JSON.stringify(data.list));
         while(weatherArray.length < 6){
             // console.log(`This is data.list at counter ${counter}: ${data.list[counter]}`)
             // if(data.list[counter].weather[0].icon === '01n' || data.list[counter].weather[0].icon === '04n' || data.list[counter].weather[0].icon === '10n' ){
@@ -81,7 +83,6 @@ function weatherAPICall(apiURL, searchedCityName){
             counter += 7;
         }
 
-        // console.log(`this is weatherArray: ${JSON.stringify(weatherArray)}`)
         todaysWeather = {
             date: weatherArray[0].dt_txt,
             icon: `http://openweathermap.org/img/wn/${weatherArray[0].weather[0].icon}.png`,
@@ -114,7 +115,9 @@ function weatherAPICall(apiURL, searchedCityName){
             renderingDay.querySelector(`#day${i+1}Humidity`).textContent = `Hum: ${fiveCast[i].humidity}%`
         }
     })
-
+    .catch(function(error){
+        alert('City not found!');
+    })
 }
 
 function renderLastCities(){
@@ -130,7 +133,7 @@ function renderLastCities(){
             let previouslySearched = document.createElement('button');
             previouslySearched.textContent = recentSearchesArray[i];
             previouslySearched.setAttribute("class", "previouslySearched");
-            previouslySearched.addEventListener("click", retrieveWeather)
+            previouslySearched.addEventListener("click", retrieveWeather);
             lastSearched.appendChild(previouslySearched);
         }
     }
