@@ -25,7 +25,7 @@ function retrieveWeather(event){
     let searchArray = [];
     let searchQuery = '';
     let cityName;
-    // Try using event.target.value.split(" ") or something of the like to get searchArray when running this fxn with onclick for recently searched buttons
+
     if(typeof event.target.value === 'string'){
         cityName = event.target.textContent;
         searchArray = event.target.textContent.split(" ");
@@ -49,6 +49,7 @@ function retrieveWeather(event){
             }
         }
     }
+
     tempAPI = weatherAPI + searchQuery + APIKey + APIQueries;
     saveToHistory(cityName)
     weatherAPICall(tempAPI, cityName);
@@ -70,16 +71,24 @@ function weatherAPICall(apiURL, searchedCityName){
     })
     .then(function(data){
         while(weatherArray.length < 6){
-            // console.log(`This is data.list at counter ${counter}: ${data.list[counter]}`)
-            // if(data.list[counter].weather[0].icon === '01n' || data.list[counter].weather[0].icon === '04n' || data.list[counter].weather[0].icon === '10n' ){
-            //     if(data.list[counter-3] && data.list[counter-3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
-            //         weatherArray.push(data.list[counter-3]);
-            //     }  else if(!data.list[counter-3] && data.list[counter+3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
-            //         weatherArray.push(data.list[counter-3]);
-            //     }
-            // }
-            
-            weatherArray.push(data.list[counter]);
+            let nightIconArray = ['01n', '02n', '10n'];
+            if(nightIconArray.includes(data.list[counter].weather[0].icon)){
+                if(data.list[counter-3] !== undefined){
+                    if(data.list[counter-3].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10) || data.list[counter-3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
+                        weatherArray.push(data.list[counter-3]);
+                    } else {
+                        weatherArray.push(data.list[counter]);
+                    }
+                } else if(data.list[counter-3] === undefined){
+                    if(data.list[counter+3] !== undefined && (data.list[counter+3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9) || data.list[counter+3].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10))){
+                        weatherArray.push(data.list[counter+3]);
+                    } else {
+                        weatherArray.push(data.list[counter]);
+                    }
+                }
+            } else {
+                weatherArray.push(data.list[counter]);
+            }
             counter += 7;
         }
 
@@ -116,7 +125,7 @@ function weatherAPICall(apiURL, searchedCityName){
         }
     })
     .catch(function(error){
-        alert('City not found!');
+        alert('City not found! Please try again!');
     })
 }
 
@@ -172,5 +181,4 @@ clearRecentlySearched.addEventListener("click", clearSearchHistory);
 
 
 // NEED TO DO
-    // Add click functionality for recently searched buttons
     // Get uv index rendering to screen
