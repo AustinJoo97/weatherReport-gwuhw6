@@ -220,7 +220,3 @@ function clearSearchHistory(){
 initializer();
 citySearch.addEventListener("submit", retrieveWeather);
 clearRecentlySearched.addEventListener("click", clearSearchHistory);
-
-
-// NEED TO DO
-    // Get uv index rendering to screen
