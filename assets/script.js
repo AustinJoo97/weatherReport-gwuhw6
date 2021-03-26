@@ -76,15 +76,15 @@ function weatherAPICall(apiURL, searchedCityName){
         while(weatherArray.length < 6){
             let nightIconArray = ['01n', '02n', '10n'];
             if(nightIconArray.includes(data.list[counter].weather[0].icon)){
-                if(data.list[counter+4] !== undefined){
-                    if(data.list[counter+4] !== undefined && (data.list[counter+4].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9) || data.list[counter+4].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10))){
-                        weatherArray.push(data.list[counter+4]);
+                if(data.list[counter+3] !== undefined){
+                    if(data.list[counter+3] !== undefined && (data.list[counter+3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9) || data.list[counter+3].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10))){
+                        weatherArray.push(data.list[counter+3]);
                     } else {
                         weatherArray.push(data.list[counter]);
                     }
-                } else if(data.list[counter+4] === undefined){
-                    if(data.list[counter-4].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10) || data.list[counter-4].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
-                        weatherArray.push(data.list[counter-4]);
+                } else if(data.list[counter+3] === undefined){
+                    if(data.list[counter-3].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10) || data.list[counter-3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
+                        weatherArray.push(data.list[counter-3]);
                     } else {
                         weatherArray.push(data.list[counter]);
                     }
