@@ -10,9 +10,9 @@ let todaysWind = document.getElementById('todaysWind');
 let todaysUVI = document.getElementById('todaysUVI');
 let todaysWeatherIcon = document.getElementById('todaysWeatherIcon');
 let futureDays = document.getElementById('fiveDayForecast');
-let weatherAPI = 'http://api.openweathermap.org/data/2.5/forecast?q=';
-let geoAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=';
-let uviAPI = 'http://api.openweathermap.org/data/2.5/uvi?';
+let weatherAPI = 'https://api.openweathermap.org/data/2.5/forecast?q=';
+let geoAPI = 'https://api.openweathermap.org/geo/1.0/direct?q=';
+let uviAPI = 'https://api.openweathermap.org/data/2.5/uvi?';
 let resetAPI = weatherAPI;
 let APIKey = '&appid=d7d8f56ce1652da17774366ee1b61ddd'
 let APIQueries = '&units=imperial'
