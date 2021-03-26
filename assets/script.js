@@ -7,9 +7,12 @@ let todaysDate = document.getElementById('todaysDate');
 let todaysTemp = document.getElementById('todaysTemp');
 let todaysHumidity = document.getElementById('todaysHumidity');
 let todaysWind = document.getElementById('todaysWind');
+let todaysUVI = document.getElementById('todaysUVI');
 let todaysWeatherIcon = document.getElementById('todaysWeatherIcon');
 let futureDays = document.getElementById('fiveDayForecast');
 let weatherAPI = 'http://api.openweathermap.org/data/2.5/forecast?q=';
+let geoAPI = 'http://api.openweathermap.org/geo/1.0/direct?q=';
+let uviAPI = 'http://api.openweathermap.org/data/2.5/uvi?';
 let resetAPI = weatherAPI;
 let APIKey = '&appid=d7d8f56ce1652da17774366ee1b61ddd'
 let APIQueries = '&units=imperial'
@@ -73,15 +76,15 @@ function weatherAPICall(apiURL, searchedCityName){
         while(weatherArray.length < 6){
             let nightIconArray = ['01n', '02n', '10n'];
             if(nightIconArray.includes(data.list[counter].weather[0].icon)){
-                if(data.list[counter-3] !== undefined){
-                    if(data.list[counter-3].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10) || data.list[counter-3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
-                        weatherArray.push(data.list[counter-3]);
+                if(data.list[counter+4] !== undefined){
+                    if(data.list[counter+4] !== undefined && (data.list[counter+4].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9) || data.list[counter+4].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10))){
+                        weatherArray.push(data.list[counter+4]);
                     } else {
                         weatherArray.push(data.list[counter]);
                     }
-                } else if(data.list[counter-3] === undefined){
-                    if(data.list[counter+3] !== undefined && (data.list[counter+3].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9) || data.list[counter+3].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10))){
-                        weatherArray.push(data.list[counter+3]);
+                } else if(data.list[counter+4] === undefined){
+                    if(data.list[counter-4].dt_txt.substr(0, 10) === data.list[counter].dt_txt.substr(0,10) || data.list[counter-4].dt_txt.substr(0, 9) === data.list[counter].dt_txt.substr(0,9)){
+                        weatherArray.push(data.list[counter-4]);
                     } else {
                         weatherArray.push(data.list[counter]);
                     }
@@ -97,16 +100,15 @@ function weatherAPICall(apiURL, searchedCityName){
             icon: `http://openweathermap.org/img/wn/${weatherArray[0].weather[0].icon}.png`,
             temperature: weatherArray[0].main.temp,
             humidity: weatherArray[0].main.humidity,
-            windSpeed: weatherArray[0].wind.speed,
-            // uvIndex: 
+            windSpeed: weatherArray[0].wind.speed
         }
-
+        
         todaysDate.textContent = `${searchedCityName} (${moment(todaysWeather.date).format('MMM Do, YYYY')})`;
         todaysWeatherIcon.src = `${todaysWeather.icon}`;
         todaysTemp.textContent = `Temperature: ${todaysWeather.temperature}F`;
         todaysHumidity.textContent = `Humidity: ${todaysWeather.humidity}%`;
         todaysWind.textContent = `Wind Speed: ${todaysWeather.windSpeed} MPH`;
-
+        
         for(let i = 1; i < weatherArray.length; i++){
             fiveCast.push({
                 date: weatherArray[i].dt_txt,
@@ -115,7 +117,7 @@ function weatherAPICall(apiURL, searchedCityName){
                 humidity: weatherArray[i].main.humidity
             })
         }
-
+        
         for(let i = 0; i < fiveCast.length; i++){
             let renderingDay = document.getElementById(`day${i+1}`);
             renderingDay.querySelector(`#day${i+1}Date`).textContent = `${moment(fiveCast[i].date).format('MMM Do, YYYY')}`;
@@ -123,9 +125,49 @@ function weatherAPICall(apiURL, searchedCityName){
             renderingDay.querySelector(`#day${i+1}Temp`).textContent = `Temp: ${fiveCast[i].temperature}F`;
             renderingDay.querySelector(`#day${i+1}Humidity`).textContent = `Hum: ${fiveCast[i].humidity}%`
         }
+
+        geoLocator(searchedCityName);
     })
     .catch(function(error){
         alert('City not found! Please try again!');
+    })
+}
+
+function geoLocator(someCityName){
+    let fullGeoAPI = geoAPI + someCityName + APIKey;
+    fetch(fullGeoAPI)
+    .then(function(response){
+        return response.json()
+    })
+    .then(function(data){
+        let latitude = data[0].lat;
+        let longitude = data[0].lon;
+        uviRetriever(latitude, longitude);
+    })
+}
+
+function uviRetriever(lat, lon){
+    fetch(uviAPI + `lat=${lat}&lon=${lon}${APIKey}`)
+    .then(function(response){
+        return response.json()
+    })
+    .then(function(data){
+        if(data.value < 3){
+            todaysUVI.style.backgroundColor = 'Green';
+            todaysUVI.style.color = 'White';
+        } else if(data.value === 3 || data.value > 3 && data.value < 6){
+            todaysUVI.style.backgroundColor = 'Yellow';
+            todaysUVI.style.color = 'Black';
+        } else if(data.value === 6 || data.value > 6 && data.value < 7){
+            todaysUVI.style.backgroundColor = 'Red';
+            todaysUVI.style.color = 'White';
+        } else if(data.value === 7 || data.value > 7){
+            todaysUVI.style.backgroundColor = 'Crimson';
+            todaysUVI.style.color = 'White';
+        }
+        todaysUVI.style.display = 'inline-block';
+        todaysUVI.textContent = `UV Index: ${data.value}`;
+        return;
     })
 }
 
