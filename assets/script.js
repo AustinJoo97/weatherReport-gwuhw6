@@ -97,7 +97,7 @@ function weatherAPICall(apiURL, searchedCityName){
 
         todaysWeather = {
             date: weatherArray[0].dt_txt,
-            icon: `http://openweathermap.org/img/wn/${weatherArray[0].weather[0].icon}.png`,
+            icon: `https://openweathermap.org/img/wn/${weatherArray[0].weather[0].icon}.png`,
             temperature: weatherArray[0].main.temp,
             humidity: weatherArray[0].main.humidity,
             windSpeed: weatherArray[0].wind.speed
@@ -112,7 +112,7 @@ function weatherAPICall(apiURL, searchedCityName){
         for(let i = 1; i < weatherArray.length; i++){
             fiveCast.push({
                 date: weatherArray[i].dt_txt,
-                icon: `http://openweathermap.org/img/wn/${weatherArray[i].weather[0].icon}.png`,
+                icon: `https://openweathermap.org/img/wn/${weatherArray[i].weather[0].icon}.png`,
                 temperature: weatherArray[i].main.temp,
                 humidity: weatherArray[i].main.humidity
             })
