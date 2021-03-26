@@ -3,6 +3,12 @@ body{
     background-color: paleturquoise;
 }
 
+button:hover,
+button:focus{
+    background-color: rgb(155, 74, 155);
+    color: white;
+}
+
 .previouslySearched{
     height: 36px;
     width: 100%;
@@ -18,6 +24,11 @@ body{
 .futureDays{
     text-align: center;
     padding-top: 50px;
+}
+
+#searchButton{
+    width: 75px;
+    border-radius: 5px;
 }
 
 #day1,
