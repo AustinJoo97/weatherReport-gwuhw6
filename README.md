@@ -15,3 +15,5 @@ In addition to rendering the weather report for the following days, upon searchi
 Finally, when any of the recent cities are called, the cities stored in localStorage will be resorted to reflect which was the most recently searched city. Additionally, clicking the clear search history button will clear all cities saved in localStorage and remove all of the buttons rendered to the DOM.
 
 ## Demo
+
+![GitHub Logo](./assets/demo/weatherReportDemo.gif)
